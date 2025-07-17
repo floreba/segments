@@ -36,11 +36,11 @@ st.sidebar.header("🔧 Filter Options")
 segments = sorted(df["segment_name"].unique())
 selected_segments = st.sidebar.multiselect("Select Segments", segments, default=segments)
 
-# Optional category filter
-#category_filter = None
-#if "dominant_category" in df.columns:
-#    category_list = sorted(df["dominant_category"].dropna().unique())
-#    category_filter = st.sidebar.multiselect("Filter by Dominant Category", category_list)
+# Optional category filter (commented out)
+# category_filter = None
+# if "dominant_category" in df.columns:
+#     category_list = sorted(df["dominant_category"].dropna().unique())
+#     category_filter = st.sidebar.multiselect("Filter by Dominant Category", category_list)
 
 # Segment descriptions
 st.sidebar.markdown("### 🧠 Segment Descriptions")
@@ -49,8 +49,8 @@ for seg in selected_segments:
 
 # --- Filter Data ---
 filtered_df = df[df["segment_name"].isin(selected_segments)]
-if category_filter:
-    filtered_df = filtered_df[filtered_df["dominant_category"].isin(category_filter)]
+# if category_filter:
+#     filtered_df = filtered_df[filtered_df["dominant_category"].isin(category_filter)]
 
 # --- Main Title ---
 st.title("📊 User Segmentation Dashboard")
@@ -59,22 +59,19 @@ st.title("📊 User Segmentation Dashboard")
 tab1, tab2, tab3 = st.tabs(["Segment Overview", "📈 Feature Explorer", "🏷️ Top Categories per Segment"])
 
 # --- Tab 1: Segment Overview ---
-# --- Tab 1: Segment Overview ---
 with tab1:
     st.subheader("Segment Sizes")
     seg_counts = filtered_df["segment_name"].value_counts().sort_index()
     total_users = seg_counts.sum()
     seg_percent = (seg_counts / total_users * 100).round(1)
 
-    # FIX: Build clean DataFrame with explicit column names
     summary_df = pd.DataFrame({
         "Segment": seg_counts.index,
         "User Count": seg_counts.values,
         "Share (%)": seg_percent.values
     })
 
-    # -- Horizontal Bar Chart with Labels --
-    fig_height = 0.7 * len(summary_df) + 2  # Adjust height dynamically
+    fig_height = 0.7 * len(summary_df) + 2
     fig, ax = plt.subplots(figsize=(10, fig_height))
 
     bars = ax.barh(summary_df["Segment"], summary_df["User Count"], color="steelblue")
@@ -89,7 +86,6 @@ with tab1:
     plt.tight_layout()
     st.pyplot(fig)
 
-    # -- Feature Summary Table BELOW the bar chart --
     st.subheader("Segment Feature Averages")
     numeric_cols = [
         col for col in df.select_dtypes(include=[np.number]).columns
@@ -102,7 +98,6 @@ with tab1:
         .reset_index()
     )
     st.dataframe(feature_summary)
-
 
 # --- Tab 2: Feature Distribution ---
 with tab2:
