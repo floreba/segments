@@ -37,10 +37,10 @@ segments = sorted(df["segment_name"].unique())
 selected_segments = st.sidebar.multiselect("Select Segments", segments, default=segments)
 
 # Optional category filter
-category_filter = None
-if "dominant_category" in df.columns:
-    category_list = sorted(df["dominant_category"].dropna().unique())
-    category_filter = st.sidebar.multiselect("Filter by Dominant Category", category_list)
+#category_filter = None
+#if "dominant_category" in df.columns:
+#    category_list = sorted(df["dominant_category"].dropna().unique())
+#    category_filter = st.sidebar.multiselect("Filter by Dominant Category", category_list)
 
 # Segment descriptions
 st.sidebar.markdown("### 🧠 Segment Descriptions")
